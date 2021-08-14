@@ -1,20 +1,20 @@
 package com.example.wordsprocessingapp.entities;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name = "stats")
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "stats")
 public class Stats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     private String word;
@@ -22,11 +22,27 @@ public class Stats {
     private Integer entry;
 
     @ManyToOne
+    @JsonIgnore
+    @JoinColumn(name = "stats_id")
     private Request request;
 
-    public Stats(String word, Integer entry, Request request) {
+    public Stats(String word, Integer entry) {
         this.word = word;
         this.entry = entry;
-        this.request = request;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Stats stats = (Stats) o;
+
+        return id != null ? id.equals(stats.id) : stats.id == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return id != null ? id.hashCode() : 0;
     }
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Stats list</title>
+</head>
+<body>
+<h1>Output</h1>
+<br>
+<tr th:each="stats: ${statisticsMap}">
+    <td th:text = "${stats.key} + ': ' + ${stats.value}"></td>
+    <br><br>
+</tr>
+<br><br>
+<h2>Input</h2>
+<form th:method="POST" th:action="@{/gui/create}" th:object="${request}">
+    <input type="text" name="payload" id="payload"/>
+    <br><br>
+    <input type="submit" value="Proceed"/>
+</form>
+</body>
+</html>
