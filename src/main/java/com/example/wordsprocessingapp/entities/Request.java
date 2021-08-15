@@ -25,6 +25,10 @@ public class Request {
     @JsonIgnore
     private List<Stats> statsList;
 
+    public Request(String payload) {
+        this.payload = payload;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -3,7 +3,7 @@ package com.example.wordsprocessingapp.controllers.api;
 import com.example.wordsprocessingapp.entities.Request;
 import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
-import com.example.wordsprocessingapp.service.WordProcessingService;
+import com.example.wordsprocessingapp.services.WordProcessingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

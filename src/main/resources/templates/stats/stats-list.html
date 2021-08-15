@@ -3,20 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Stats list</title>
+    <script type = "text/javascript" th:src="@{/js/jquery.js}"></script>
 </head>
 <body>
 <h1>Output</h1>
 <br>
 <tr th:each="stats: ${statisticsMap}">
-    <td th:text = "${stats.key} + ': ' + ${stats.value}"></td>
+    <td><span th:text = "${stats.key} + ' : ' + ${stats.value}" th:id="data"/></td>
     <br><br>
 </tr>
-<br><br>
+<br>
 <h2>Input</h2>
-<form th:method="POST" th:action="@{/gui/create}" th:object="${request}">
+    <form method="post" onsubmit="return check();">
     <input type="text" name="payload" id="payload"/>
     <br><br>
-    <input type="submit" value="Proceed"/>
-</form>
+    <button type = "submit" id ="prc">Proceed</button>
+    </form>
+<script type = "text/javascript" th:src="@{/js/script.js}"></script>
 </body>
 </html>
