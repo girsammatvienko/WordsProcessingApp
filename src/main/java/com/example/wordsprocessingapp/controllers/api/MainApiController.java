@@ -5,6 +5,7 @@ import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
 import com.example.wordsprocessingapp.services.WordProcessingService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,8 @@ public class MainApiController {
     public MainApiController(WordProcessingService service) {
         this.service = service;
     }
+
+    public MainApiController() {}
 
     @PostMapping(value = "/add", consumes = "application/json")
     public Map<String, Integer> proceed(@RequestBody Request request) throws EmptyPayloadException, InputFormatException {

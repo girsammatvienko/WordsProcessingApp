@@ -89,12 +89,17 @@ public class WordProcessingServiceTest {
                 new Stats("word2", 4),
                 new Stats("word3", 3));
         when(statsRepository.findAll()).thenReturn(statsList);
-        Map<String, Integer> expectedStatisticsMap = new LinkedHashMap<>();
-        for(Stats stats:statsList) {
-            expectedStatisticsMap.put(stats.getWord(), stats.getEntry());
-        }
-        expectedStatisticsMap.put("Unique words", statsList.size());
+        Map<String, Integer> expectedStatisticsMap = createExpectedStatisticsForStatsList(statsList);
         Assertions.assertEquals(expectedStatisticsMap, service.getStatistics());
+    }
+
+    private Map<String, Integer> createExpectedStatisticsForStatsList(List<Stats> statsList) {
+        Map<String, Integer> result = new LinkedHashMap<>();
+        for(Stats stats:statsList) {
+            result.put(stats.getWord(), stats.getEntry());
+        }
+        result.put("Unique words", statsList.size());
+        return result;
     }
 
 

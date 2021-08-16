@@ -1,16 +1,12 @@
 package com.example.wordsprocessingapp.controllers.exception;
 
-import com.example.wordsprocessingapp.entities.exceptions.CustomError;
-import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
-import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
+import com.example.wordsprocessingapp.entities.Errors.CustomError;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import java.awt.im.InputContext;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

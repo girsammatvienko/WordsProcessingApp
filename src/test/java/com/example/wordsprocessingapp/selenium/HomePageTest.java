@@ -3,6 +3,7 @@ package com.example.wordsprocessingapp.selenium;
 import com.example.wordsprocessingapp.controllers.api.MainApiController;
 import com.example.wordsprocessingapp.controllers.gui.MainGuiController;
 import com.example.wordsprocessingapp.entities.Request;
+import com.example.wordsprocessingapp.repositories.StatsRepository;
 import com.example.wordsprocessingapp.selenium.config.ConfProperties;
 import com.example.wordsprocessingapp.selenium.pages.HomePage;
 import org.assertj.core.api.Assertions;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,6 +31,8 @@ import org.springframework.test.web.servlet.htmlunit.webdriver.MockMvcHtmlUnitDr
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 @RunWith(SpringRunner.class)
@@ -38,6 +42,9 @@ public class HomePageTest {
     private WebDriver driver;
 
     private HomePage homePage;
+
+    @Autowired
+    private StatsRepository statsRepository;
 
     private String homePageUrl;
 
@@ -54,13 +61,14 @@ public class HomePageTest {
 
     @Test
     public void addValidWordTest() throws InterruptedException {
+        clearRepository();
         getPage();
-        String validWord = "Word" + new Random().nextInt(10000);
+        String validWord = "Word";
         Integer elementsAmountBeforeAdding = homePage.getWordsStats().size();
         homePage.inputWord(validWord);
         homePage.clickProceedButton();
         synchronized (this) {
-            wait(1000);
+            wait(1500);
         }
         Integer elementsAmountAfterAdding = homePage.getWordsStats().size();
         driver.close();
@@ -96,6 +104,8 @@ public class HomePageTest {
         driver.close();
         Assertions.assertThat(alertMessage).isEqualTo("Input cannot be empty!");
     }
+
+    private void clearRepository() { statsRepository.deleteAll(); }
 
     private void getPage() {
         driver.get(homePageUrl);

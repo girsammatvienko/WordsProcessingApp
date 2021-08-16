@@ -1,6 +1,7 @@
 package com.example.wordsprocessingapp;
 
 import com.example.wordsprocessingapp.controllers.api.MainApiController;
+import com.example.wordsprocessingapp.controllers.exception.RestResponseEntityExceptionHandler;
 import com.example.wordsprocessingapp.controllers.gui.MainGuiController;
 import com.example.wordsprocessingapp.entities.Request;
 import com.example.wordsprocessingapp.entities.Stats;
@@ -11,6 +12,7 @@ import com.example.wordsprocessingapp.repositories.StatsRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.AfterEach;
@@ -22,40 +24,55 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MockMvcBuilder;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-
+import org.json.*;
 import java.awt.*;
+import java.util.Iterator;
+
+import org.springframework.test.web.servlet.htmlunit.MockMvcWebClientBuilder;
+import org.springframework.web.util.NestedServletException;
 
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
-@AutoConfigureMockMvc
 public class WordProcessingAppIntegrationTest {
-    @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private MainApiController mainApiController;
 
+    @Autowired
+    private StatsRepository statsRepository;
+
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.standaloneSetup(mainApiController)
+                .setControllerAdvice(new RestResponseEntityExceptionHandler())
+                .build();
+    }
+
     @Test
     public void addingValidWordTest() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Request request = new Request("word");
-        mockMvc.perform(post("http://localhost:8080/api/add")
+        Request request = new Request("word1");
+        MvcResult result = mockMvc.perform(post("http://localhost:8080/api/add")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.word").isNumber());
+                       .andReturn();
+        String content = result.getResponse().getContentAsString();
+        assertTrue(content.contains("\"" + request.getPayload() + "\""));
     }
 
     @Test
@@ -66,7 +83,9 @@ public class WordProcessingAppIntegrationTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(mvcResult -> Assertions.assertTrue(mvcResult.getResolvedException()
-                        instanceof InputFormatException));
+                        instanceof InputFormatException))
+                .andExpect(result -> assertEquals("Input word cannot consist only of numbers!",
+                        result.getResolvedException().getMessage()));;
     }
 
     @Test
@@ -77,7 +96,9 @@ public class WordProcessingAppIntegrationTest {
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(mvcResult -> Assertions.assertTrue(mvcResult.getResolvedException()
-                        instanceof EmptyPayloadException));
+                        instanceof EmptyPayloadException))
+                .andExpect(result -> assertEquals("Input cannot be empty!",
+                result.getResolvedException().getMessage()));;
     }
 
 }

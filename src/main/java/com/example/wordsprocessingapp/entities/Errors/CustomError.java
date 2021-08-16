@@ -1,4 +1,4 @@
-package com.example.wordsprocessingapp.entities.exceptions;
+package com.example.wordsprocessingapp.entities.Errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
