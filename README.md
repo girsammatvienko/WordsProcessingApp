@@ -9,7 +9,7 @@ All layers tested with Junit and Mockito.
 
 Front-end part tested with Selenium. *Using Chrome driver*
 <h1>How to use GUI</h1>
-There is one main page which can be accessed by following address: http://localhost:8080/gui/getAll.
+There is one main page which can be accessed by following address: <a href = "http://localhost:8080/gui/getAll"> http://localhost:8080/gui/getAll</a>.
 On the main page there is sorted in descending order by entries list of words and a field "Unique words" that 
 displays amount of unique words in the database. 
 GUI can handle incorrect inputs such as: *Payload cannot be empty*, *Input cannot consist only of numbers*.
