@@ -44,4 +44,10 @@ public class Request {
         return id != null ? id.hashCode() : 0;
     }
 
+    @Override
+    public String toString() {
+        return "Request{" +
+                "payload='" + payload + '\'' +
+                '}';
+    }
 }

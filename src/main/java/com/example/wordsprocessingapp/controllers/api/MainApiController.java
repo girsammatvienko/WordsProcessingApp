@@ -4,6 +4,8 @@ import com.example.wordsprocessingapp.entities.Request;
 import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
 import com.example.wordsprocessingapp.services.WordProcessingService;
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class MainApiController {
     private WordProcessingService service;
 

@@ -6,11 +6,13 @@ import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
 import com.example.wordsprocessingapp.repositories.RequestRepository;
 import com.example.wordsprocessingapp.repositories.StatsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Slf4j
 @Service
 public class WordProcessingService {
     private RequestRepository requestRepository;
@@ -34,6 +36,8 @@ public class WordProcessingService {
             Stats stats = statsRepository.findByWord(word).get();
             stats.setEntry(stats.getEntry() + 1);
             statsRepository.save(stats);
+            log.info("Stats was updated");
+            log.info("If of updated stats: " + stats.getId());
         }
         else {
             String word = getWord(request.getPayload());
@@ -41,10 +45,13 @@ public class WordProcessingService {
             stats.setRequest(request);
             requestRepository.save(request);
             statsRepository.save(stats);
+            log.info("Request was saved in database");
+            log.info("Stats was saved in database");
         }
     }
 
     public Map<String, Integer> getStatistics() {
+        log.info("Generating statistics...");
         Map<String, Integer> statistics = convertListToMap(getAllStats());
         statistics = getSortedByEntriesMap(statistics);
         statistics.put("Unique words", statistics.size());
