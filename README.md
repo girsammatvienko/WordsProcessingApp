@@ -1,4 +1,4 @@
-Application description
+<h2>Application description</h2>
 The service layer abstraction is used to provide two presentation layers. The first presentation layer is an api (controller.api package), the second one is a web Thymeleaf-based GUI (controller.gui package).
 
 Database operations performed with Hibernate. *Address of console http://localhost:8080/h2-console/ *Access login "sa" without password
