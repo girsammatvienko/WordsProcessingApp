@@ -1,4 +1,0 @@
-FROM openjdk:11
-ADD target/WordsProcessingApp.jar WordsProcessingApp.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "WordsProcessingApp.jar"]
