@@ -1,6 +1,6 @@
 package com.example.wordsprocessingapp.controllers.exception;
 
-import com.example.wordsprocessingapp.entities.Errors.CustomError;
+import com.example.wordsprocessingapp.entities.errors.CustomError;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

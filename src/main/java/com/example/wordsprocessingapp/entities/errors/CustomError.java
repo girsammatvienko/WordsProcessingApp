@@ -1,11 +1,9 @@
-package com.example.wordsprocessingapp.entities.Errors;
+package com.example.wordsprocessingapp.entities.errors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
