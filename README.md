@@ -14,6 +14,8 @@ On the main page there is sorted in descending order by entries list of words an
 displays amount of unique words in the database. 
 GUI can handle incorrect inputs such as: *Payload cannot be empty*, *Input cannot consist only of numbers*.
 <h1>Deploying on docker</h1>
-To define a multi-container application in Docker you can use a docker-compose.yml compose file which provided in src directory.
-Also there is a Docker image build script that contains all commands needed to build an image of the app.
+To define a multi-container application in Docker you can use a docker-compose.yml compose file which provided in src directory by executing 
+following command: *docker-compose docker-compose.yml up*.
+Also there is a Docker image build script that contains all commands needed to build an image of the app. To build an image you should use
+this command: *docker build -f DockerFile -t <desired name in lower case>*.
    
