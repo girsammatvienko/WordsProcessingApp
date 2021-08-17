@@ -21,8 +21,11 @@ public class HomePage {
     @FindBy(xpath = "//*[@id=\"prc\"]")
     private WebElement proceedButton;
 
-    @FindBy(xpath = "//*[@id=\"data\"]")
-    private List<WebElement> wordsStats;
+    @FindBy(xpath = "//*[@id=\"key\"]")
+    private List<WebElement> words;
+
+    @FindBy(xpath = "//*[@id=\"value\"]")
+    private List<WebElement> entries;
 
     public void inputWord(String word) {
         inputWordField.sendKeys(word);
@@ -30,6 +33,8 @@ public class HomePage {
 
     public void clickProceedButton() {proceedButton.click(); }
 
-    public List<WebElement> getWordsStats() { return wordsStats; }
+    public List<WebElement> getWords() { return words; }
+
+    public List<WebElement> getEntries() { return entries; }
 
 }

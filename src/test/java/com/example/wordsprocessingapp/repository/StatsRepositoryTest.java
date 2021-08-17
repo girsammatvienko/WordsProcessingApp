@@ -1,9 +1,7 @@
 package com.example.wordsprocessingapp.repository;
 
 import com.example.wordsprocessingapp.entities.Stats;
-import com.example.wordsprocessingapp.repositories.RequestRepository;
 import com.example.wordsprocessingapp.repositories.StatsRepository;
-import com.sun.xml.bind.v2.TODO;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;

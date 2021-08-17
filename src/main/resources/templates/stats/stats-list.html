@@ -9,7 +9,7 @@
 <h1>Output</h1>
 <br>
 <tr th:each="stats: ${statisticsMap}">
-    <td><span th:text = "${stats.key} + ' : ' + ${stats.value}" th:id="data"/></td>
+    <td><span th:text = "${stats.key} + ' : '" th:id="key"/><span th:text=" ${stats.value}" th:id="value"/></td>
     <br><br>
 </tr>
 <br>

@@ -1,39 +1,22 @@
 package com.example.wordsprocessingapp.selenium;
 
-import com.example.wordsprocessingapp.controllers.api.MainApiController;
-import com.example.wordsprocessingapp.controllers.gui.MainGuiController;
-import com.example.wordsprocessingapp.entities.Request;
 import com.example.wordsprocessingapp.repositories.StatsRepository;
 import com.example.wordsprocessingapp.selenium.config.ConfProperties;
 import com.example.wordsprocessingapp.selenium.pages.HomePage;
+import com.google.common.collect.Ordering;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.event.annotation.AfterTestExecution;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.htmlunit.webdriver.MockMvcHtmlUnitDriverBuilder;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
-
+import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT,properties = { "server.port=8080" })
@@ -64,13 +47,12 @@ public class HomePageTest {
         clearRepository();
         getPage();
         String validWord = "Word";
-        Integer elementsAmountBeforeAdding = homePage.getWordsStats().size();
-        homePage.inputWord(validWord);
-        homePage.clickProceedButton();
+        Integer elementsAmountBeforeAdding = homePage.getWords().size();
+        addWord(validWord, 1);
         synchronized (this) {
             wait(1500);
         }
-        Integer elementsAmountAfterAdding = homePage.getWordsStats().size();
+        Integer elementsAmountAfterAdding = homePage.getWords().size();
         driver.close();
         Assertions.assertThat(elementsAmountAfterAdding).isEqualTo(elementsAmountBeforeAdding + 1);
     }
@@ -79,8 +61,7 @@ public class HomePageTest {
     public void addInvalidWordConsistingOnlyOfNumbersTest() throws InterruptedException {
         getPage();
         String invalidWord = "1234";
-        homePage.inputWord(invalidWord);
-        homePage.clickProceedButton();
+        addWord(invalidWord, 1);
         synchronized (this) {
             wait(1500);
         }
@@ -94,8 +75,7 @@ public class HomePageTest {
     public void addEmptyWordTest() throws InterruptedException {
         getPage();
         String invalidWord = "";
-        homePage.inputWord(invalidWord);
-        homePage.clickProceedButton();
+        addWord(invalidWord, 1);
         synchronized (this) {
             wait(1500);
         }
@@ -103,6 +83,32 @@ public class HomePageTest {
         acceptAlertIfPresent(driver.switchTo().alert());
         driver.close();
         Assertions.assertThat(alertMessage).isEqualTo("Input cannot be empty!");
+    }
+
+    @Test
+    public void wordsSortedInDescendingOrderTest() throws InterruptedException {
+        getPage();
+        addWord("Hello", 5);
+        addWord("World", 3);
+        addWord("Earth", 2);
+        List<Integer> entries = new ArrayList<>();
+        homePage.getEntries().
+                stream()
+                .forEach((e)->entries.add(Integer.parseInt(e.getText())));
+        entries.remove(entries.size()-1);
+        boolean sorted = Ordering.natural().reverse().isOrdered(entries);
+        driver.close();
+        assertTrue(sorted);
+    }
+
+    private void addWord(String word, int times) throws InterruptedException {
+        for(int i = 0;i < times;i++) {
+            homePage.inputWord(word);
+            homePage.clickProceedButton();
+            synchronized (this) {
+                wait(800);
+            }
+        }
     }
 
     private void clearRepository() { statsRepository.deleteAll(); }

@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -52,8 +54,7 @@ public class WordProcessingService {
 
     public Map<String, Integer> getStatistics() {
         log.info("Generating statistics...");
-        Map<String, Integer> statistics = convertListToMap(getAllStats());
-        statistics = getSortedByEntriesMap(statistics);
+        Map<String, Integer> statistics = getAllStats();
         statistics.put("Unique words", statistics.size());
         return statistics;
     }
@@ -62,31 +63,15 @@ public class WordProcessingService {
         return statsRepository.existsByWord(word);
     }
 
-    private Map<String, Integer> getSortedByEntriesMap(Map<String, Integer> mapToSort) {
-        List<Map.Entry<String, Integer>> list = new ArrayList<>(mapToSort.entrySet());
-        list.sort(Map.Entry.comparingByValue(new Comparator<Integer>() {
-            @Override
-            public int compare(Integer o1, Integer o2) {
-                return o2 - o1;
-            }
-        }));
-        Map<String, Integer> result = new LinkedHashMap();
-        for (Map.Entry<String, Integer> entry : list) {
-            result.put(entry.getKey(), entry.getValue());
-        }
-        return result;
-    }
-
-    private Map<String, Integer> convertListToMap(List<Stats> statsList) {
-        Map<String, Integer> statsMap = new LinkedHashMap<>();
-        for(Stats stats:statsList) {
-            statsMap.put(stats.getWord(), stats.getEntry());
-        }
+    private LinkedHashMap<String, Integer> getAllStats() {
+        LinkedHashMap<String, Integer> statsMap = statsRepository.findAll()
+                .stream()
+                .sorted(Comparator.comparingInt(Stats::getEntry).reversed())
+                .collect(Collectors.toMap(Stats::getWord,
+                                          Stats::getEntry,
+                                          (v1, v2)-> {throw new AssertionError("Keys should be unique!");},
+                                          LinkedHashMap::new));
         return statsMap;
-    }
-
-    private List<Stats> getAllStats() {
-        return statsRepository.findAll();
     }
 
     private String getWord(String payload) {
