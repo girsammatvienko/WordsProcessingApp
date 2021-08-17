@@ -1,7 +1,8 @@
 <h1>Application description</h1>
 The service layer abstraction is used to provide two presentation layers. The first presentation layer is an api (controller.api package), the second one is a web Thymeleaf\Javascript-based GUI (controller.gui package).
 
-Database operations performed with Hibernate. *Access login: "root", password: "root"* 
+Database operations performed with Hibernate. In the application was used such database as MySql.
+ *Access login: "root", password: "root"* 
 
 Application uses Thymeleaf templates.
 
