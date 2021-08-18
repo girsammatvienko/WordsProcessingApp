@@ -31,7 +31,8 @@ public class MainGuiController {
     }
 
     @RequestMapping("/proceed")
-    public String evaluateSentence(@RequestBody Request request, Model model) throws EmptyPayloadException, InputFormatException {
+    public String evaluateSentence(@RequestBody Request request, Model model) throws EmptyPayloadException,
+            InputFormatException {
         service.proceed(request);
         return "redirect:/gui/getAll";
     }
