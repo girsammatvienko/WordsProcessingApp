@@ -27,7 +27,7 @@ public class HomePage {
     @FindBy(xpath = "//*[@id=\"value\"]")
     private List<WebElement> entries;
 
-    public void inputWord(String word) {
+    public void inputText(String word) {
         inputWordField.sendKeys(word);
     }
 

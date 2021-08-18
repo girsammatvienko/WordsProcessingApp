@@ -3,6 +3,7 @@ package com.example.wordsprocessingapp;
 import com.example.wordsprocessingapp.controllers.api.MainApiController;
 import com.example.wordsprocessingapp.controllers.exception.RestResponseEntityExceptionHandler;
 import com.example.wordsprocessingapp.entities.Request;
+import com.example.wordsprocessingapp.entities.Stats;
 import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
 import com.example.wordsprocessingapp.repositories.StatsRepository;
@@ -18,6 +19,9 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -42,22 +46,30 @@ public class WordProcessingAppIntegrationTest {
     }
 
     @Test
-    public void addingValidWordTest() throws Exception {
+    public void sendingRequestWithValidPayloadTest() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Request request = new Request("word1");
-        MvcResult result = mockMvc.perform(post("http://localhost:8080/api/add")
+        Request request = new Request("hello hello world earth");
+        MvcResult result = mockMvc.perform(post("http://localhost:8080/api/proceed")
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON))
                        .andReturn();
         String content = result.getResponse().getContentAsString();
-        assertTrue(content.contains("\"" + request.getPayload() + "\""));
+        System.out.println("content: " + content);
+        LinkedHashMap<String, Integer> expectedResultMap = new LinkedHashMap<>();
+        expectedResultMap.put("hello", 2);
+        expectedResultMap.put("world", 1);
+        expectedResultMap.put("earth", 1);
+        expectedResultMap.put("Unique words", 3);
+        String expectedResultJson = objectMapper.writeValueAsString(expectedResultMap);
+        System.out.println(expectedResultJson);
+        assertTrue(content.equals(expectedResultJson));
     }
 
     @Test
-    public void addingWordConsistingOnlyOfNumbersAsPayloadTest() throws Exception {
+    public void sendingRequestWithPayloadConsistingOnlyOfNumbersTest() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
-        Request request = new Request("1234");
-        mockMvc.perform(post("http://localhost:8080/api/add")
+        Request request = new Request("123453");
+        mockMvc.perform(post("http://localhost:8080/api/proceed")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(mvcResult -> Assertions.assertTrue(mvcResult.getResolvedException()
@@ -67,10 +79,10 @@ public class WordProcessingAppIntegrationTest {
     }
 
     @Test
-    public void addingEmptyWordTest() throws Exception {
+    public void sendingRequestWithEmptyPayloadTest() throws Exception {
         ObjectMapper objectMapper = new ObjectMapper();
         Request request = new Request("");
-        mockMvc.perform(post("http://localhost:8080/api/add")
+        mockMvc.perform(post("http://localhost:8080/api/proceed")
                 .content(objectMapper.writeValueAsString(request))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(mvcResult -> Assertions.assertTrue(mvcResult.getResolvedException()

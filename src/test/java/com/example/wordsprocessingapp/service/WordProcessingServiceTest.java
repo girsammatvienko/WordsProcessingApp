@@ -43,7 +43,7 @@ public class WordProcessingServiceTest {
 
     @Test
     public void sendingRequestWithPayloadConsistingOnlyOfNumbers() throws EmptyPayloadException, InputFormatException {
-        Request request = new Request("1234"); // Payload cannot consists only of numbers
+        Request request = new Request("1234");
         Assertions.assertThrows(InputFormatException.class, () -> {
             service.proceed(request);
         });
@@ -63,29 +63,6 @@ public class WordProcessingServiceTest {
         service.proceed(request);
         verify(requestRepository, Mockito.times(1)).save(new Request("hello"));
         verify(statsRepository, Mockito.times(1)).save(new Stats("hello", 1));
-    }
-
-    @Test
-    public void updatingOfStatsWhenAddingRepeatingWordTest() throws EmptyPayloadException, InputFormatException {
-        Request request = new Request("word");
-        Stats stats = new Stats("word", 1);
-        when(statsRepository.existsByWord("word")).thenReturn(true);
-        when(statsRepository.findByWord("word")).thenReturn(Optional.of(stats));
-        service.proceed(request);
-        verify(requestRepository, Mockito.times(0)).save(request);
-        verify(statsRepository, Mockito.times(1)).save(stats);
-    }
-
-    @Test
-    public void statisticsMapGenerationTest() {
-        List<Stats> statsList = new ArrayList<>();
-        Collections.addAll(statsList, new Stats("word", 1),
-                new Stats("word1", 2),
-                new Stats("word2", 4),
-                new Stats("word3", 3));
-        when(statsRepository.findAll()).thenReturn(statsList);
-        Map<String, Integer> expectedStatisticsMap = createExpectedStatisticsForStatsList(statsList);
-        Assertions.assertEquals(expectedStatisticsMap, service.getStatistics());
     }
 
     private Map<String, Integer> createExpectedStatisticsForStatsList(List<Stats> statsList) {

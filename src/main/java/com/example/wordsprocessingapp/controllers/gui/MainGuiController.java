@@ -25,14 +25,14 @@ public class MainGuiController {
 
     @RequestMapping("/getAll")
     public String getAllStatistics(Model model) {
-        //model.addAttribute("statisticsMap", service.generateStatisticsMap(new Request("hello")));
+        model.addAttribute("statisticsMap", service.getCurrentStat());
         model.addAttribute("request", new Request());
         return "stats/stats-list";
     }
 
-    @RequestMapping("/create")
-    public String proceed(@RequestBody Request request, Model model) throws EmptyPayloadException, InputFormatException {
-        model.addAttribute("statisticsMap", service.proceed(request));
+    @RequestMapping("/proceed")
+    public String evaluateSentence(@RequestBody Request request, Model model) throws EmptyPayloadException, InputFormatException {
+        service.proceed(request);
         return "redirect:/gui/getAll";
     }
 

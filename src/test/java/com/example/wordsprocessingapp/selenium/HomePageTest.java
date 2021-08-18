@@ -43,25 +43,24 @@ public class HomePageTest {
     }
 
     @Test
-    public void addValidWordTest() throws InterruptedException {
+    public void evaluateValidSentence() throws InterruptedException {
         clearRepository();
         getPage();
-        String validWord = "Word";
-        Integer elementsAmountBeforeAdding = homePage.getWords().size();
-        addWord(validWord, 1);
+        String validWord = "world hello earth sun";
+        sendRequest(validWord);
         synchronized (this) {
             wait(1500);
         }
-        Integer elementsAmountAfterAdding = homePage.getWords().size();
+        Integer elementsAmountAfterSendingRequest = homePage.getWords().size();
         driver.close();
-        Assertions.assertThat(elementsAmountAfterAdding).isEqualTo(elementsAmountBeforeAdding + 1);
+        Assertions.assertThat(elementsAmountAfterSendingRequest).isEqualTo(5); //4 + Unique words field
     }
 
     @Test
     public void addInvalidWordConsistingOnlyOfNumbersTest() throws InterruptedException {
         getPage();
         String invalidWord = "1234";
-        addWord(invalidWord, 1);
+        sendRequest(invalidWord);
         synchronized (this) {
             wait(1500);
         }
@@ -74,8 +73,8 @@ public class HomePageTest {
     @Test
     public void addEmptyWordTest() throws InterruptedException {
         getPage();
-        String invalidWord = "";
-        addWord(invalidWord, 1);
+        String invalidPayload= "";
+        sendRequest(invalidPayload);
         synchronized (this) {
             wait(1500);
         }
@@ -88,9 +87,7 @@ public class HomePageTest {
     @Test
     public void wordsSortedInDescendingOrderTest() throws InterruptedException {
         getPage();
-        addWord("Hello", 5);
-        addWord("World", 3);
-        addWord("Earth", 2);
+        sendRequest("Hello Hello Hello World World World Hello Earth Hello Earth");
         List<Integer> entries = new ArrayList<>();
         homePage.getEntries().
                 stream()
@@ -101,14 +98,12 @@ public class HomePageTest {
         assertTrue(sorted);
     }
 
-    private void addWord(String word, int times) throws InterruptedException {
-        for(int i = 0;i < times;i++) {
-            homePage.inputWord(word);
-            homePage.clickProceedButton();
-            synchronized (this) {
-                wait(800);
-            }
-        }
+    private void sendRequest(String payload) throws InterruptedException {
+       homePage.inputText(payload);
+       homePage.clickProceedButton();
+       synchronized (this) {
+           wait(1200);
+       }
     }
 
     private void clearRepository() { statsRepository.deleteAll(); }
