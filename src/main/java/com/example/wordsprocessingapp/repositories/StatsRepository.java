@@ -12,4 +12,5 @@ public interface StatsRepository extends CrudRepository<Stats, Long> {
     List<Stats> findAll();
     Boolean existsByWord(String word);
     Optional<Stats> findByWord(String word);
+    List<Stats> findAllByRequest_Id(Long id);
 }

@@ -8,7 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping("/gui")
@@ -22,14 +25,14 @@ public class MainGuiController {
 
     @RequestMapping("/getAll")
     public String getAllStatistics(Model model) {
-        model.addAttribute("statisticsMap", service.getStatistics());
+        //model.addAttribute("statisticsMap", service.generateStatisticsMap(new Request("hello")));
         model.addAttribute("request", new Request());
         return "stats/stats-list";
     }
 
     @RequestMapping("/create")
-    public String proceed(@ModelAttribute("request") Request request) throws EmptyPayloadException, InputFormatException {
-        service.add(request);
+    public String proceed(@RequestBody Request request, Model model) throws EmptyPayloadException, InputFormatException {
+        model.addAttribute("statisticsMap", service.proceed(request));
         return "redirect:/gui/getAll";
     }
 

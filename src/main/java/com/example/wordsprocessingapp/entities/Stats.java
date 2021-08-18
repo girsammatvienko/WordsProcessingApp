@@ -23,12 +23,18 @@ public class Stats {
 
     @ManyToOne
     @JsonIgnore
-    @JoinColumn(name = "stats_id")
+    @JoinColumn(name = "request_id")
     private Request request;
 
     public Stats(String word, Integer entry) {
         this.word = word;
         this.entry = entry;
+    }
+
+    public Stats(String word, Integer entry, Request request) {
+        this.word = word;
+        this.entry = entry;
+        this.request = request;
     }
 
     @Override

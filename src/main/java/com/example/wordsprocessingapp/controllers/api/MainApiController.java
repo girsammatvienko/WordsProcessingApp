@@ -6,10 +6,7 @@ import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
 import com.example.wordsprocessingapp.services.WordProcessingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
@@ -26,10 +23,17 @@ public class MainApiController {
 
     public MainApiController() {}
 
-    @PostMapping(value = "/add", consumes = "application/json")
-    public Map<String, Integer> proceed(@RequestBody Request request) throws EmptyPayloadException, InputFormatException {
-        service.add(request);
-        Map<String, Integer> statistics = service.getStatistics();
-        return statistics;
+    @PostMapping(value = "/proceed", consumes = "application/json")
+    public Map<String, Integer> evaluateSentence(@RequestBody Request request) throws EmptyPayloadException, InputFormatException {
+        return service.proceed(request);
     }
+
+    @GetMapping(value = "/getStats/{id}")
+    public Map<String, Integer> getAllStats(@PathVariable Long id) {
+        return service.getStatsById(id);
+    }
+
+
+
+
 }
