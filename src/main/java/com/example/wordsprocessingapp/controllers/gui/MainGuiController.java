@@ -36,5 +36,11 @@ public class MainGuiController {
         return "redirect:/gui/getAll";
     }
 
+    @RequestMapping("/history")
+    public String getRequestHistory(Model model) {
+        model.addAttribute("requestHistory", service.getRequestHistory());
+        return "requests/request-history-list";
+    }
+
 
 }

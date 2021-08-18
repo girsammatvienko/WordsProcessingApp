@@ -59,7 +59,7 @@ public class HomePageTest {
     @Test
     public void addInvalidWordConsistingOnlyOfNumbersTest() throws InterruptedException {
         getPage();
-        String invalidWord = "1234";
+        String invalidWord = "123456";
         sendRequest(invalidWord);
         synchronized (this) {
             wait(1500);

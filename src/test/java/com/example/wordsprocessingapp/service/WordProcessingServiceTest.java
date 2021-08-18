@@ -43,7 +43,7 @@ public class WordProcessingServiceTest {
 
     @Test
     public void sendingRequestWithPayloadConsistingOnlyOfNumbers() throws EmptyPayloadException, InputFormatException {
-        Request request = new Request("1234");
+        Request request = new Request("123456");
         Assertions.assertThrows(InputFormatException.class, () -> {
             service.proceed(request);
         });

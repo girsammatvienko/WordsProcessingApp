@@ -4,6 +4,7 @@ import com.example.wordsprocessingapp.entities.Request;
 import com.example.wordsprocessingapp.entities.Stats;
 import com.example.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.example.wordsprocessingapp.entities.exceptions.InputFormatException;
+import com.example.wordsprocessingapp.entities.RequestHistory;
 import com.example.wordsprocessingapp.repositories.RequestRepository;
 import com.example.wordsprocessingapp.repositories.StatsRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,11 @@ public class WordProcessingService {
         wordsMap.put("Unique words", wordsMap.size());
         currentStat = wordsMap;
         return wordsMap;
+    }
+
+    public RequestHistory getRequestHistory() {
+        List<Request> requestList = requestRepository.findAll();
+        return new RequestHistory(requestList);
     }
 
     public Map<String, Integer> getCurrentStat() { return currentStat; }

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>History of requests</title>
+</head>
+<body>
+<h1>Requests history</h1>
+<table>
+<tr>
+    <td><b>Id</b></td>
+    <td><b>Payload</b></td>
+</tr>
+<tr th:each="request: ${requestHistory.requestList}">
+    <td th:text="${request.id}"/>
+    <td th:text="${request.payload}"/>
+    <br><br>
+</tr>
+</table>
+<br><br>
+<a th:href="@{/gui/getAll}">Back</a>
+</body>
+</html>
