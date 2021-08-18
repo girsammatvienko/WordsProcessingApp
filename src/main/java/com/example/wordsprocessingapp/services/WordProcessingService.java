@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class WordProcessingService {
-    private RequestRepository requestRepository;
+    private RequestRepository requestRepository;asdsd
     private StatsRepository statsRepository;
 
     @Autowired
