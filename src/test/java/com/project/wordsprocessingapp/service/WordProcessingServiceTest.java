@@ -7,10 +7,13 @@ import com.project.wordsprocessingapp.entities.exceptions.InputFormatException;
 import com.project.wordsprocessingapp.repositories.RequestRepository;
 import com.project.wordsprocessingapp.repositories.StatsRepository;
 import com.project.wordsprocessingapp.services.WordProcessingService;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.*;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -21,17 +24,21 @@ import java.util.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.*;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class WordProcessingServiceTest {
-    @MockBean
+    @Mock
     private RequestRepository requestRepository;
 
-    @MockBean
+    @Mock
     private StatsRepository statsRepository;
 
-    @Autowired
+    @InjectMocks
     private WordProcessingService service;
+
+    @Before
+    public void setUp() {
+        MockitoAnnotations.openMocks(this);
+    }
 
     @Test
     public void sendingRequestWithValidPayloadTest() throws EmptyPayloadException, InputFormatException {
@@ -52,6 +59,7 @@ public class WordProcessingServiceTest {
     @Test
     public void sendingRequestWithEmptyPayload() {
         Request request = new Request("");
+        when(requestRepository.save(request)).thenReturn(request);
         Assertions.assertThrows(EmptyPayloadException.class, () -> {
             service.proceed(request);
         });
@@ -61,6 +69,7 @@ public class WordProcessingServiceTest {
     public void AddingNewStatsByRequestTest() throws EmptyPayloadException, InputFormatException {
         Request request = new Request("hello");
         service.proceed(request);
+        when(requestRepository.save(request)).thenReturn(request);
         verify(requestRepository, Mockito.times(1)).save(new Request("hello"));
         verify(statsRepository, Mockito.times(1)).save(new Stats("hello", 1));
     }

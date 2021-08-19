@@ -59,7 +59,7 @@ public class HomePageTest {
     }
 
     @Test
-    public void addInvalidWordConsistingOnlyOfNumbersTest() throws InterruptedException {
+    public void sendRequestWithInvalidPayloadConsistingOnlyOfNumbersTest() throws InterruptedException {
         getPage();
         String invalidWord = "123456";
         sendRequest(invalidWord);
@@ -73,7 +73,7 @@ public class HomePageTest {
     }
 
     @Test
-    public void addEmptyWordTest() throws InterruptedException {
+    public void sendRequestWithEmptyPayloadTest() throws InterruptedException {
         getPage();
         String invalidPayload= "";
         sendRequest(invalidPayload);
