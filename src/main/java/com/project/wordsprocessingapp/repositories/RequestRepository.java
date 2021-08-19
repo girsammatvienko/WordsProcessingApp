@@ -1,6 +1,7 @@
 package com.project.wordsprocessingapp.repositories;
 
 import com.project.wordsprocessingapp.entities.Request;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
