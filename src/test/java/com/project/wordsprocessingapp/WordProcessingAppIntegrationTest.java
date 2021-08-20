@@ -6,7 +6,6 @@ import com.project.wordsprocessingapp.controllers.exception.RestResponseEntityEx
 import com.project.wordsprocessingapp.entities.Request;
 import com.project.wordsprocessingapp.entities.exceptions.EmptyPayloadException;
 import com.project.wordsprocessingapp.entities.exceptions.InputFormatException;
-import com.project.wordsprocessingapp.repositories.StatsRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
@@ -32,9 +31,6 @@ public class WordProcessingAppIntegrationTest {
 
     @Autowired
     private MainApiController mainApiController;
-
-    @Autowired
-    private StatsRepository statsRepository;
 
     @Before
     public void setUp() {

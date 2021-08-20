@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 public class WordProcessingService {
+
     private RequestRepository requestRepository;
     private StatsRepository statsRepository;
     private Map<String, Integer> currentStat;
@@ -32,9 +33,10 @@ public class WordProcessingService {
 
 
     public Map<String, Integer> proceed(Request request) throws InputFormatException, EmptyPayloadException {
-        if(request.getPayload().isEmpty()) throw new EmptyPayloadException("Input cannot be empty!");
-        if(isConsistOfNumbers(getWord(request.getPayload()))) throw new
-                InputFormatException("Input word cannot consist only of numbers!");
+        if(request.getPayload().isEmpty())
+            throw new EmptyPayloadException("Input cannot be empty!");
+        if(isConsistOfNumbers(getWord(request.getPayload())))
+            throw new InputFormatException("Input word cannot consist only of numbers!");
         Map<String, Integer> wordsMap = getWordsMap(request.getPayload());
         log.info("Saving request...");
         requestRepository.save(request);
@@ -66,7 +68,9 @@ public class WordProcessingService {
     }
 
     private Map<String, Integer> getWordsMap(String payload) {
-        List<String> wordsList = Arrays.stream(payload.split(" ")).collect(Collectors.toList());
+        List<String> wordsList = Arrays.stream(payload.replaceAll("[^a-zA-Z ]", "")
+                .toLowerCase(Locale.ROOT)
+                .split(" ")).collect(Collectors.toList());
         Map<String, Integer> counterMap = new LinkedHashMap<>();
         for(String word:wordsList) {
             if(!word.isEmpty()) {
